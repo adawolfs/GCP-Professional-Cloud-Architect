@@ -5,7 +5,15 @@ provider "google" {
   project     = "bridge-cloud-362101"
   region      = "us-east1"
 }
-  
+
+data "google_client_openid_userinfo" "me" {
+}
+
+resource "google_os_login_ssh_public_key" "cache" {
+  user =  data.google_client_openid_userinfo.me.email
+  key = file("~/.ssh/adawolfs.pub")
+}
+
 
 resource "google_compute_instance" "default" {
   name         = "rustedchipmunk"
